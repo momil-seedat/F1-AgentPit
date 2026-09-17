@@ -90,6 +90,8 @@ src/output/       final results.json writer
 viewer/           static HTML/JS results dashboard (reads runs/<race_id>/ at load time)
 main.py           CLI entrypoint
 ```
+<img width="1320" height="885" alt="image" src="https://github.com/user-attachments/assets/21c09d0b-cf61-4865-8077-18c466df7f05" />
+
 
 ## Design notes
 
