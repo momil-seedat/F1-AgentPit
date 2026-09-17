@@ -1,0 +1,31 @@
+name: f1-strategy-sim
+
+services:
+  f1-ollama:
+    image: ollama/ollama:latest
+    container_name: f1-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - f1_ollama_data:/root/.ollama
+    # GPU passthrough (optional, requires nvidia-container-toolkit on the host):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  f1-simulator:
+    build: .
+    container_name: f1-simulator
+    depends_on:
+      - f1-ollama
+    volumes:
+      - ./runs:/app/runs
+      - ./config:/app/config
+    command: ["--config", "config/race_config.json", "--ai", "ollama", "--ollama-host", "http://f1-ollama:11434"]
+
+volumes:
+  f1_ollama_data:

@@ -1,0 +1,7 @@
+[
+  { "driver_id": "driver_01", "name": "Charles Leclerc", "skill": 0.96, "consistency": 0.92, "risk_tolerance": 0.72 },
+  { "driver_id": "driver_02", "name": "Kimi Antonelli", "skill": 0.91, "consistency": 0.89, "risk_tolerance": 0.68 },
+  { "driver_id": "driver_03", "name": "Oscar Piastri", "skill": 0.95, "consistency": 0.94, "risk_tolerance": 0.67 },
+  { "driver_id": "driver_04", "name": "Max Verstappen", "skill": 0.98, "consistency": 0.94, "risk_tolerance": 0.82 },
+  { "driver_id": "driver_05", "name": "Carlos Sainz", "skill": 0.93, "consistency": 0.91, "risk_tolerance": 0.66 }
+]

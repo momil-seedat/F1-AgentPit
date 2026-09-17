@@ -1,0 +1,5 @@
+{
+  "soft": { "grip": 1.05, "degradation": 1.20 },
+  "medium": { "grip": 1.00, "degradation": 1.00 },
+  "hard": { "grip": 0.96, "degradation": 0.75 }
+}

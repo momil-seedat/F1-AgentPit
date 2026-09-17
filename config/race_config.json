@@ -1,0 +1,16 @@
+{
+  "race_id": "race_001",
+  "environment_id": "env_01",
+  "track_id": "track_01",
+  "total_laps": 10,
+  "tick_seconds": 1,
+  "cars": ["car_01", "car_02", "car_03", "car_04", "car_05"],
+  "ai_token_budget": 700,
+  "ai_token_overage": 100,
+  "seed": 12345,
+  "initial_weather": {
+    "condition": "dry",
+    "rain_intensity": 0.0,
+    "track_grip": 1.0
+  }
+}

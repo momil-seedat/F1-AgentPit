@@ -1,0 +1,10 @@
+{
+  "track_id": "track_01",
+  "lap_distance_m": 5000,
+  "segments": [
+    { "segment_id": 1, "length_m": 1200, "speed_factor": 1.00 },
+    { "segment_id": 2, "length_m": 800, "speed_factor": 0.75 },
+    { "segment_id": 3, "length_m": 1500, "speed_factor": 1.00 },
+    { "segment_id": 4, "length_m": 1500, "speed_factor": 0.80 }
+  ]
+}

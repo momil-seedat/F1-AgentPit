@@ -1,0 +1,42 @@
+[
+  {
+    "car_id": "car_01",
+    "team": "Ferrari",
+    "car_model": "SF-26",
+    "driver_id": "driver_01",
+    "specs": { "pace": 0.98, "tyre_efficiency": 0.95, "fuel_efficiency": 0.93, "reliability": 0.97, "pit_time": 22.5 },
+    "initial_state": { "fuel": 100.0, "tyre": "medium", "tyre_age": 0, "position": 3, "speed": 0.0 }
+  },
+  {
+    "car_id": "car_02",
+    "team": "Mercedes",
+    "car_model": "W17",
+    "driver_id": "driver_02",
+    "specs": { "pace": 0.94, "tyre_efficiency": 0.93, "fuel_efficiency": 0.94, "reliability": 0.96, "pit_time": 22.6 },
+    "initial_state": { "fuel": 100.0, "tyre": "medium", "tyre_age": 0, "position": 2, "speed": 0.0 }
+  },
+  {
+    "car_id": "car_03",
+    "team": "McLaren",
+    "car_model": "MCL40",
+    "driver_id": "driver_03",
+    "specs": { "pace": 0.98, "tyre_efficiency": 0.95, "fuel_efficiency": 0.94, "reliability": 0.96, "pit_time": 22.2 },
+    "initial_state": { "fuel": 100.0, "tyre": "medium", "tyre_age": 0, "position": 6, "speed": 0.0 }
+  },
+  {
+    "car_id": "car_04",
+    "team": "Red Bull Racing",
+    "car_model": "RB22",
+    "driver_id": "driver_04",
+    "specs": { "pace": 1.00, "tyre_efficiency": 0.95, "fuel_efficiency": 0.94, "reliability": 0.96, "pit_time": 22.1 },
+    "initial_state": { "fuel": 100.0, "tyre": "medium", "tyre_age": 0, "position": 7, "speed": 0.0 }
+  },
+  {
+    "car_id": "car_05",
+    "team": "Williams",
+    "car_model": "FW48",
+    "driver_id": "driver_05",
+    "specs": { "pace": 0.92, "tyre_efficiency": 0.91, "fuel_efficiency": 0.93, "reliability": 0.95, "pit_time": 22.8 },
+    "initial_state": { "fuel": 100.0, "tyre": "medium", "tyre_age": 0, "position": 9, "speed": 0.0 }
+  }
+]

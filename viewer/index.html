@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Race Classification</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#000000;
+  --surface:#0c0d10;
+  --surface-2:#16181d;
+  --border:#26282f;
+  --text:#f3f4f6;
+  --text-dim:#9ba0ac;
+  --text-faint:#5d6270;
+  --accent:#ff2318;
+  --good:#37d484;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  padding-inline:16px;
+  padding-block:28px 48px;
+}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:28px;}
+
+.hdr{display:flex;flex-direction:column;gap:6px;}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+}
+h1{
+  font-family:'Titillium Web',sans-serif;
+  font-weight:900;
+  font-style:italic;
+  font-size:clamp(28px,6vw,42px);
+  margin:0;
+  letter-spacing:-.01em;
+  text-wrap:balance;
+}
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  color:var(--text-dim);
+}
+.meta-row b{color:var(--text);font-weight:600;}
+
+.race-picker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:6px 10px;
+}
+
+.podium{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  align-items:end;
+}
+.pcard{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-top:3px solid var(--team);
+  border-radius:10px;
+  padding:16px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  position:relative;
+}
+.pcard.p1{order:2; padding-block-start:22px;}
+.pcard.p2{order:1;}
+.pcard.p3{order:3;}
+.prank{
+  font-family:'Titillium Web',sans-serif;
+  font-weight:900;
+  font-style:italic;
+  font-size:34px;
+  line-height:1;
+  color:var(--team);
+}
+.pname{font-weight:600;font-size:15px;text-wrap:balance;}
+.pteam{font-size:12px;color:var(--text-dim);}
+.pgap{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:var(--text-dim);
+  margin-top:auto;
+  padding-top:6px;
+  border-top:1px dashed var(--border);
+}
+.pgap b{color:var(--text);font-weight:700;}
+.crown{position:absolute;top:-11px;right:12px;font-size:20px;}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+.panel-hd{
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+}
+.panel-hd h2{
+  font-family:'Titillium Web',sans-serif;
+  font-weight:700;
+  font-size:15px;
+  margin:0;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.panel-hd span{font-size:12px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+
+.row{
+  display:grid;
+  grid-template-columns:34px 1fr auto auto auto 20px;
+  gap:12px;
+  align-items:center;
+  padding:12px 18px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  background:var(--surface);
+  transition:background .12s ease;
+}
+.row:last-child{border-bottom:none;}
+.row:hover{background:var(--surface-2);}
+.row.open{background:var(--surface-2);}
+
+.pos{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:15px;
+  color:var(--text-faint);
+}
+.row.p1 .pos{color:var(--accent);}
+
+.who{display:flex;align-items:center;gap:10px;min-width:0;}
+.swatch{width:6px;height:28px;border-radius:3px;flex:none;background:var(--team);}
+.who-txt{min-width:0;}
+.who-name{font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.who-team{font-size:11.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.stat{text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;}
+.stat .v{font-size:14px;font-weight:600;}
+.stat .l{font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;display:block;margin-top:1px;}
+
+.pits{display:flex;gap:3px;justify-content:flex-end;}
+.pit-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+.pit-dot.empty{background:var(--border);}
+
+.chev{
+  font-size:11px;
+  color:var(--text-faint);
+  transition:transform .15s ease;
+  justify-self:end;
+}
+.row.open .chev{transform:rotate(90deg);color:var(--text);}
+
+.drawer{
+  display:none;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding:4px 18px 16px 62px;
+}
+.drawer.show{display:block;}
+.dec{
+  display:grid;
+  grid-template-columns:56px 92px 1fr auto;
+  gap:10px;
+  align-items:start;
+  padding:9px 0;
+  border-top:1px solid var(--border);
+  font-size:12.5px;
+}
+.dec:first-child{border-top:none;}
+.dec .lap{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--text-faint);
+  font-size:11.5px;
+  padding-top:2px;
+}
+.trig{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.03em;
+  color:var(--text-dim);
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:5px;
+  padding:2px 6px;
+  height:fit-content;
+  white-space:nowrap;
+}
+.reason{color:var(--text-dim);line-height:1.4;}
+.call{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:11px;
+  letter-spacing:.04em;
+  padding:2px 8px;
+  border-radius:5px;
+  height:fit-content;
+  white-space:nowrap;
+}
+.call.PIT{background:color-mix(in srgb, var(--accent) 18%, transparent);color:var(--accent);}
+.call.PUSH{background:color-mix(in srgb, var(--good) 18%, transparent);color:var(--good);}
+.call.STAY_OUT{background:color-mix(in srgb, var(--text-faint) 22%, transparent);color:var(--text-dim);}
+.dec.exhausted .reason{font-style:italic;color:var(--text-faint);}
+
+.no-dec{padding:14px 0;color:var(--text-faint);font-size:12.5px;font-style:italic;}
+
+.state{
+  max-width:920px;margin:80px auto;text-align:center;
+  font-family:'JetBrains Mono',monospace;color:var(--text-dim);font-size:13px;line-height:1.6;
+}
+.state code{background:var(--surface-2);padding:2px 6px;border-radius:4px;color:var(--text);}
+
+.foot{
+  text-align:center;
+  font-size:11px;
+  color:var(--text-faint);
+  font-family:'JetBrains Mono',monospace;
+}
+
+@media (max-width:520px){
+  .podium{grid-template-columns:1fr;}
+  .pcard.p1,.pcard.p2,.pcard.p3{order:0;}
+  .row{grid-template-columns:26px 1fr auto 20px;}
+  .stat.hide-sm{display:none;}
+  .drawer{padding-left:18px;}
+  .dec{grid-template-columns:44px 1fr;grid-template-areas:"lap trig" "reason reason" "call call";row-gap:4px;}
+  .dec .lap{grid-area:lap;}
+  .dec .trig{grid-area:trig;justify-self:start;}
+  .dec .reason{grid-area:reason;}
+  .dec .call{grid-area:call;justify-self:start;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app">
+  <div class="state">Loading race data…</div>
+</div>
+
+<script>
+const TEAM_COLOR = {
+  "Ferrari": "#e8002d",
+  "Mercedes": "#00d7b6",
+  "McLaren": "#ff8000",
+  "Red Bull Racing": "#3671c6",
+  "Williams": "#64c4ff"
+};
+
+const params = new URLSearchParams(location.search);
+const raceId = params.get('race') || 'race_001';
+
+function fmtTime(s){
+  const m = Math.floor(s/60);
+  const sec = (s%60).toFixed(1).padStart(4,'0');
+  return `${m}:${sec}`;
+}
+function fmtGap(diff){
+  return diff === 0 ? '—' : `+${diff.toFixed(1)}s`;
+}
+
+async function fetchJSON(path){
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`${path} → HTTP ${res.status}`);
+  return res.json();
+}
+
+async function fetchJSONL(path){
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`${path} → HTTP ${res.status}`);
+  const text = await res.text();
+  return text.split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+}
+
+function renderError(err){
+  document.getElementById('app').innerHTML = `
+    <div class="state">
+      Couldn't load race data for <code>${raceId}</code>.<br><br>
+      Make sure you're serving this folder from the project root, e.g.:<br>
+      <code>python3 -m http.server 8000</code><br>
+      then open <code>http://localhost:8000/viewer/?race=${raceId}</code><br><br>
+      <span style="color:var(--text-faint)">${err.message}</span>
+    </div>
+  `;
+}
+
+function render({ results, decisions, drivers, cars }){
+  const driverById = Object.fromEntries(drivers.map(d => [d.driver_id, d]));
+  const carById = Object.fromEntries(cars.map(c => [c.car_id, c]));
+  const leaderTime = results.results[0].total_time;
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="hdr">
+      <div class="hdr-top">
+        <span class="eyebrow">F1 Strategy-AI Simulator · Phase 1</span>
+        <select class="race-picker" id="racePicker"></select>
+      </div>
+      <h1>Race Classification — ${results.race_id}</h1>
+      <div class="meta-row" id="metaRow"></div>
+    </div>
+    <div class="podium" id="podium"></div>
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>Full Classification</h2>
+        <span>tap a driver for AI strategy log</span>
+      </div>
+      <div id="tableBody"></div>
+    </div>
+    <div class="foot">telemetry.jsonl · decisions.jsonl · results.json — deterministic seeded simulation</div>
+  `;
+
+  const picker = document.getElementById('racePicker');
+  picker.innerHTML = `<option value="${results.race_id}">${results.race_id}</option>`;
+  picker.addEventListener('change', () => {
+    location.search = `?race=${picker.value}`;
+  });
+
+  const metaRow = document.getElementById('metaRow');
+  const totalPits = results.results.reduce((a,r)=>a+r.pit_stops,0);
+  metaRow.innerHTML = `
+    <span><b>${results.results.length}</b> cars</span>
+    <span><b>${totalPits}</b> pit stops</span>
+    <span><b>${decisions.length}</b> AI decisions logged</span>
+  `;
+
+  const podium = document.getElementById('podium');
+  results.results.slice(0,3).forEach(r => {
+    const car = carById[r.car_id];
+    const driver = driverById[r.driver_id];
+    const color = TEAM_COLOR[car.team] || '#888';
+    const gap = r.position === 1 ? 0 : r.total_time - leaderTime;
+    const div = document.createElement('div');
+    div.className = `pcard p${r.position}`;
+    div.style.setProperty('--team', color);
+    div.innerHTML = `
+      ${r.position===1 ? '<div class="crown">🏆</div>' : ''}
+      <div class="prank">P${r.position}</div>
+      <div>
+        <div class="pname">${driver.name}</div>
+        <div class="pteam">${car.team} · ${car.car_model}</div>
+      </div>
+      <div class="pgap"><b>${fmtTime(r.total_time)}</b> ${r.position>1 ? fmtGap(gap) : 'race time'}</div>
+    `;
+    podium.appendChild(div);
+  });
+
+  const tableBody = document.getElementById('tableBody');
+  results.results.forEach(r => {
+    const car = carById[r.car_id];
+    const driver = driverById[r.driver_id];
+    const color = TEAM_COLOR[car.team] || '#888';
+    const gap = r.position === 1 ? 0 : r.total_time - leaderTime;
+    const carDecisions = decisions.filter(d => d.car_id === r.car_id);
+
+    const row = document.createElement('div');
+    row.className = `row p${r.position}`;
+    row.style.setProperty('--team', color);
+    row.innerHTML = `
+      <div class="pos">${r.position}</div>
+      <div class="who">
+        <div class="swatch"></div>
+        <div class="who-txt">
+          <div class="who-name">${driver.name}</div>
+          <div class="who-team">${car.team}</div>
+        </div>
+      </div>
+      <div class="stat hide-sm"><span class="v">${fmtGap(gap)}</span><span class="l">Gap</span></div>
+      <div class="stat">
+        <div class="pits">${Array.from({length:3}).map((_,i)=>`<div class="pit-dot ${i < r.pit_stops ? '' : 'empty'}"></div>`).join('')}</div>
+        <span class="l">${r.pit_stops} stop${r.pit_stops===1?'':'s'}</span>
+      </div>
+      <div class="stat hide-sm"><span class="v">${r.ai_tokens_used}</span><span class="l">Tokens</span></div>
+      <div class="chev">▸</div>
+    `;
+
+    const drawer = document.createElement('div');
+    drawer.className = 'drawer';
+    if (carDecisions.length === 0){
+      drawer.innerHTML = `<div class="no-dec">No AI strategy calls triggered for this car.</div>`;
+    } else {
+      drawer.innerHTML = carDecisions.map(d => {
+        const exhausted = d.ai_tokens_used === 0;
+        return `
+          <div class="dec ${exhausted?'exhausted':''}">
+            <div class="lap">LAP ${d.state_before_decision.lap}</div>
+            <div class="trig">${d.trigger.replace('_',' ')}</div>
+            <div class="reason">${d.reason}</div>
+            <div class="call ${d.decision}">${d.decision.replace('_',' ')}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    row.addEventListener('click', () => {
+      const isOpen = drawer.classList.contains('show');
+      drawer.classList.toggle('show', !isOpen);
+      row.classList.toggle('open', !isOpen);
+    });
+
+    tableBody.appendChild(row);
+    tableBody.appendChild(drawer);
+  });
+}
+
+async function main(){
+  try {
+    const [results, decisions, drivers, cars] = await Promise.all([
+      fetchJSON(`../runs/${raceId}/results.json`),
+      fetchJSONL(`../runs/${raceId}/decisions.jsonl`),
+      fetchJSON('../data/drivers.json'),
+      fetchJSON('../data/cars.json'),
+    ]);
+    render({ results, decisions, drivers, cars });
+  } catch (err) {
+    renderError(err);
+  }
+}
+
+main();
+</script>
+</body>
+</html>
